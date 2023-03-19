@@ -15,19 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.usagetimecontrol.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tristaam.usagetimecontrol.Controller.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Listener.InstalledAppListener;
 import com.tristaam.usagetimecontrol.Model.App;
 
 import java.util.List;
 
-public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapter.DataViewHolder> {
+public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapter.DataViewHolder> implements InstalledAppListener {
     private List<App> appList;
     private Context context;
     private int lastPosition;
     private OnClickListener listener;
-
-    public interface OnClickListener {
-        void onClick(int position);
-    }
 
     public InstalledAppAdapter(Context context, List<App> appList, OnClickListener listener) {
         this.appList = appList;
@@ -87,7 +84,7 @@ public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapte
                 @Override
                 public void onClick(View v) {
                     if (listener != null) {
-                        listener.onClick(getAdapterPosition());
+                        listener.OnClick(getAdapterPosition());
                     }
                 }
             });
