@@ -1,4 +1,4 @@
-package com.tristaam.usagetimecontrol.Controller;
+package com.tristaam.usagetimecontrol.Controller.Util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
