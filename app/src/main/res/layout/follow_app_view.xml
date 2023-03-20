@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/imgView1"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="270dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
@@ -34,29 +34,30 @@
             android:layout_height="40dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="10dp"
-            app:layout_constraintTop_toTopOf="@id/imgView1"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintLeft_toLeftOf="@id/imgView1"
             app:layout_constraintRight_toRightOf="@id/imgView1"
-            tools:srcCompat="@tools:sample/avatars"
-            tools:ignore="ContentDescription" />
+            app:layout_constraintTop_toTopOf="@id/imgView1"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <Switch
             android:id="@+id/swtFollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@null"
             android:thumbTint="@color/white"
             android:track="@drawable/switch_custom"
-            android:background="@null"
             app:layout_constraintRight_toRightOf="@+id/imgView1"
             app:layout_constraintTop_toTopOf="@+id/imgView1"
             tools:ignore="UseSwitchCompatOrMaterialXml" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/statistic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/montserratregular"
+            android:layout_marginTop="5dp"
             android:text="Đã sử dụng / (%)"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="@+id/imgView1"
@@ -67,13 +68,111 @@
             android:id="@+id/btnExpand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:pivotX="50%"
+            android:pivotY="50%"
             app:layout_constraintBottom_toBottomOf="@+id/imgView1"
             app:layout_constraintEnd_toEndOf="@+id/imgView1"
             app:layout_constraintStart_toStartOf="@+id/swtFollow"
-            android:pivotX="50%"
-            android:pivotY="50%"
-            android:layout_marginBottom="5dp"
             app:srcCompat="@drawable/triangle" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/expandLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="@+id/imgView1"
+            app:layout_constraintEnd_toEndOf="@id/imgView1"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintStart_toStartOf="@+id/iconApp1"
+            app:layout_constraintTop_toBottomOf="@+id/statistic">
+
+            <TextView
+                android:id="@+id/setTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/montserratregular"
+                android:text="Thời gian giới hạn:"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:text="Giờ"
+                android:textColor="@color/white"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="@+id/hourPicker"
+                app:layout_constraintStart_toStartOf="@+id/hourPicker"
+                app:layout_constraintTop_toBottomOf="@+id/setTime" />
+
+            <NumberPicker
+                android:id="@+id/hourPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/setTime"
+                app:layout_constraintTop_toBottomOf="@id/hour" />
+
+            <TextView
+                android:id="@+id/minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:text="Phút"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/minutePicker"
+                app:layout_constraintStart_toStartOf="@+id/minutePicker"
+                app:layout_constraintTop_toBottomOf="@+id/setTime" />
+
+            <NumberPicker
+                android:id="@+id/minutePicker"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/hourPicker" />
+
+            <TextView
+                android:id="@+id/second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:text="Giây"
+                android:layout_marginTop="5dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@+id/secondPicker"
+                app:layout_constraintStart_toStartOf="@+id/secondPicker"
+                app:layout_constraintTop_toBottomOf="@+id/setTime" />
+
+            <NumberPicker
+                android:id="@+id/secondPicker"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/minutePicker" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_custom"
+                app:backgroundTint="@null"
+                android:fontFamily="@font/montserratsemibold"
+                android:textColor="@color/white"
+                android:text="Lưu"
+                app:layout_constraintBottom_toBottomOf="@+id/secondPicker"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/secondPicker"
+                app:layout_constraintTop_toTopOf="@+id/secondPicker" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
