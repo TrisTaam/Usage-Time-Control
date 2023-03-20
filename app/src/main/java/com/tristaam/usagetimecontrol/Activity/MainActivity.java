@@ -1,13 +1,11 @@
 package com.tristaam.usagetimecontrol.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Adapter.FollowAppAdapter;
-import com.tristaam.usagetimecontrol.Controller.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Model.App;
 
 import java.util.ArrayList;
