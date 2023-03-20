@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -14,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usagetimecontrol.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.tristaam.usagetimecontrol.Controller.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Listener.InstalledAppListener;
 import com.tristaam.usagetimecontrol.Model.App;
 
@@ -58,6 +59,7 @@ public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapte
     public void setAnimation(View viewToAnimate, int position) {
         if (position > lastPosition) {
             Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
             viewToAnimate.startAnimation(animation);
             lastPosition = position;
         }
