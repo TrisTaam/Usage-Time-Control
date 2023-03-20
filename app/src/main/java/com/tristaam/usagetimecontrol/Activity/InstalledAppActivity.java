@@ -36,7 +36,7 @@ public class InstalledAppActivity extends AppCompatActivity {
         installedAppView.setHasFixedSize(true);
         installedAppView.setAdapter(new InstalledAppAdapter(this, installedAppList, new InstalledAppAdapter.OnClickListener() {
             @Override
-            public void onClick(int position) {
+            public void OnClick(int position) {
                 finish(position);
             }
         }));
