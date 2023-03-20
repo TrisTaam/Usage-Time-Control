@@ -1,26 +1,28 @@
 package com.tristaam.usagetimecontrol.Adapter;
 
 import android.animation.ObjectAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CompoundButton;
+import android.view.ViewTreeObserver;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.NumberPicker;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.usagetimecontrol.R;
-import com.tristaam.usagetimecontrol.Activity.MainActivity;
-import com.tristaam.usagetimecontrol.Controller.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
+import com.tristaam.usagetimecontrol.Controller.Util.CustomFormatter;
+import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Util.ScreenFunc;
 import com.tristaam.usagetimecontrol.Model.App;
 
 import java.util.List;
@@ -68,38 +70,81 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         private Switch swtFollow;
         private ImageView btnExpand;
         private boolean isExpand;
+        private ConstraintLayout expandLayout;
+        private NumberPicker hourPicker;
+        private NumberPicker minutePicker;
+        private NumberPicker secondPicker;
+        private ViewGroup.LayoutParams layoutParams;
 
         public DataViewHolder(View itemView) {
             super(itemView);
-            imgView1=itemView.findViewById(R.id.imgView1);
+            imgView1 = itemView.findViewById(R.id.imgView1);
             name1 = itemView.findViewById(R.id.name1);
             packageName1 = itemView.findViewById(R.id.packageName1);
-            iconApp1=itemView.findViewById(R.id.iconApp1);
-            swtFollow=itemView.findViewById(R.id.swtFollow);
-            btnExpand=itemView.findViewById(R.id.btnExpand);
-            isExpand=false;
+            iconApp1 = itemView.findViewById(R.id.iconApp1);
+            swtFollow = itemView.findViewById(R.id.swtFollow);
+            btnExpand = itemView.findViewById(R.id.btnExpand);
+            expandLayout = itemView.findViewById(R.id.expandLayout);
+            hourPicker = itemView.findViewById(R.id.hourPicker);
+            minutePicker = itemView.findViewById(R.id.minutePicker);
+            secondPicker = itemView.findViewById(R.id.secondPicker);
+
+            hourPicker.setMinValue(0);
+            hourPicker.setMaxValue(23);
+            hourPicker.setFormatter(new CustomFormatter());
+
+            minutePicker.setMinValue(0);
+            minutePicker.setMaxValue(59);
+            minutePicker.setFormatter(new CustomFormatter());
+
+            secondPicker.setMinValue(0);
+            secondPicker.setMaxValue(60);
+            secondPicker.setFormatter(new CustomFormatter());
+
+            isExpand = false;
+
+            layoutParams = imgView1.getLayoutParams();
+            Log.d("Size:",layoutParams.height+"");
+            SetViewSize(isExpand);
 
             btnExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    float startRotation=btnExpand.getRotation();
-                    float endRotation;
-                    ViewGroup.LayoutParams layoutParams=imgView1.getLayoutParams();
-                    isExpand=!isExpand;
-                    if (isExpand){
-                        layoutParams.height+=100;
-                        endRotation=startRotation+180.f;
-                    }
-                    else{
-                        layoutParams.height-=100;
-                        endRotation=startRotation-180.f;
-                    }
-                    imgView1.setLayoutParams(layoutParams);
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(btnExpand, "rotation", startRotation, endRotation);
-                    animator.setDuration(1000);
-                    animator.start();
+                    ChangeViewSize(isExpand);
                 }
             });
+        }
+
+        public void SetViewSize(boolean isExpand){
+//            int startHeight = CONSTANT.START_DP * (int)ScreenFunc.GetDensityRatio(context);
+//            int endHeight = CONSTANT.END_DP * (int)ScreenFunc.GetDensityRatio(context);
+//            ObjectAnimator animator = ObjectAnimator.ofInt(layoutParams, "height",startHeight, endHeight);
+//            animator.setDuration(500);
+//            animator.start();
+
+            if (isExpand) {
+                expandLayout.setVisibility(View.VISIBLE);
+                layoutParams.height = CONSTANT.END_DP * (int)ScreenFunc.GetDensityRatio(context);
+            } else {
+                expandLayout.setVisibility(View.GONE);
+                layoutParams.height = CONSTANT.START_DP * (int)ScreenFunc.GetDensityRatio(context);
+            }
+        }
+
+        public void ChangeViewSize(boolean isExpand){
+            float startRotation = btnExpand.getRotation();
+            float endRotation;
+            isExpand = !isExpand;
+            SetViewSize(isExpand);
+            if (isExpand) {
+                endRotation = startRotation + 180.f;
+            } else {
+                endRotation = startRotation - 180.f;
+            }
+            imgView1.setLayoutParams(layoutParams);
+            ObjectAnimator animator = ObjectAnimator.ofFloat(btnExpand, "rotation", startRotation, endRotation);
+            animator.setDuration(500);
+            animator.start();
         }
     }
 }
