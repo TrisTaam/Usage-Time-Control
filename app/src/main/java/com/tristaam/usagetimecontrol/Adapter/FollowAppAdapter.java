@@ -1,6 +1,9 @@
 package com.tristaam.usagetimecontrol.Adapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
@@ -25,6 +28,7 @@ import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Util.ScreenFunc;
 import com.tristaam.usagetimecontrol.Model.App;
 
+import java.security.CryptoPrimitive;
 import java.util.List;
 
 public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.DataViewHolder> {
@@ -75,6 +79,7 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         private NumberPicker minutePicker;
         private NumberPicker secondPicker;
         private ViewGroup.LayoutParams layoutParams;
+        private float densityRatio;
 
         public DataViewHolder(View itemView) {
             super(itemView);
@@ -103,9 +108,12 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
 
             isExpand = false;
 
+            densityRatio = ScreenFunc.GetDensityRatio(context);
+
             layoutParams = imgView1.getLayoutParams();
-            Log.d("Size:",layoutParams.height+"");
-            SetViewSize(isExpand);
+            layoutParams.height = CONSTANT.START_DP * (int) densityRatio;
+            imgView1.setLayoutParams(layoutParams);
+            expandLayout.setVisibility(View.GONE);
 
             btnExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -115,17 +123,48 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             });
         }
 
-        public void SetViewSize(boolean isExpand){
+        public void SetViewSize(boolean isExpand) {
+            ValueAnimator animator;
             if (isExpand) {
-                expandLayout.setVisibility(View.VISIBLE);
-                layoutParams.height = CONSTANT.END_DP * (int)ScreenFunc.GetDensityRatio(context);
+                animator = ValueAnimator.ofInt(CONSTANT.START_DP * (int) densityRatio, CONSTANT.END_DP * (int) densityRatio);
+                animator.setDuration(500);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        layoutParams.height = (int) valueAnimator.getAnimatedValue();
+                        imgView1.setLayoutParams(layoutParams);
+                    }
+                });
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        expandLayout.setVisibility(View.VISIBLE);
+                    }
+                });
+                animator.start();
             } else {
-                expandLayout.setVisibility(View.GONE);
-                layoutParams.height = CONSTANT.START_DP * (int)ScreenFunc.GetDensityRatio(context);
+                animator = ValueAnimator.ofInt(CONSTANT.END_DP * (int) densityRatio, CONSTANT.START_DP * (int) densityRatio);
+                animator.setDuration(500);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        layoutParams.height = (int) valueAnimator.getAnimatedValue();
+                        imgView1.setLayoutParams(layoutParams);
+                    }
+                });
+                animator.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        super.onAnimationStart(animation);
+                        expandLayout.setVisibility(View.GONE);
+                    }
+                });
+                animator.start();
             }
         }
 
-        public void ChangeViewSize(){
+        public void ChangeViewSize() {
             isExpand = !isExpand;
             SetViewSize(isExpand);
             ObjectAnimator animator;
@@ -134,7 +173,6 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             } else {
                 animator = ObjectAnimator.ofFloat(btnExpand, "rotation", 180.f, 0.f);
             }
-            imgView1.setLayoutParams(layoutParams);
             animator.setDuration(500);
             animator.start();
         }
