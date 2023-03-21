@@ -110,18 +110,12 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             btnExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChangeViewSize(isExpand);
+                    ChangeViewSize();
                 }
             });
         }
 
         public void SetViewSize(boolean isExpand){
-//            int startHeight = CONSTANT.START_DP * (int)ScreenFunc.GetDensityRatio(context);
-//            int endHeight = CONSTANT.END_DP * (int)ScreenFunc.GetDensityRatio(context);
-//            ObjectAnimator animator = ObjectAnimator.ofInt(layoutParams, "height",startHeight, endHeight);
-//            animator.setDuration(500);
-//            animator.start();
-
             if (isExpand) {
                 expandLayout.setVisibility(View.VISIBLE);
                 layoutParams.height = CONSTANT.END_DP * (int)ScreenFunc.GetDensityRatio(context);
@@ -131,18 +125,16 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             }
         }
 
-        public void ChangeViewSize(boolean isExpand){
-            float startRotation = btnExpand.getRotation();
-            float endRotation;
+        public void ChangeViewSize(){
             isExpand = !isExpand;
             SetViewSize(isExpand);
+            ObjectAnimator animator;
             if (isExpand) {
-                endRotation = startRotation + 180.f;
+                animator = ObjectAnimator.ofFloat(btnExpand, "rotation", 0.f, 180.f);
             } else {
-                endRotation = startRotation - 180.f;
+                animator = ObjectAnimator.ofFloat(btnExpand, "rotation", 180.f, 0.f);
             }
             imgView1.setLayoutParams(layoutParams);
-            ObjectAnimator animator = ObjectAnimator.ofFloat(btnExpand, "rotation", startRotation, endRotation);
             animator.setDuration(500);
             animator.start();
         }
