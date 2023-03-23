@@ -5,13 +5,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -21,30 +17,29 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.usagetimecontrol.R;
+import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.CustomFormatter;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Util.ScreenFunc;
-import com.tristaam.usagetimecontrol.Model.App;
+import com.tristaam.usagetimecontrol.Model.FollowApp;
 
-import java.security.CryptoPrimitive;
 import java.util.List;
 
 public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.DataViewHolder> {
-    private List<App> appList;
+    private List<FollowApp> appList;
     private Context context;
 
-    public FollowAppAdapter(Context context, List<App> appList) {
+    public FollowAppAdapter(Context context, List<FollowApp> appList) {
         this.appList = appList;
         this.context = context;
     }
 
-    public List<App> getApplicationList() {
+    public List<FollowApp> getApplicationList() {
         return appList;
     }
 
-    public void setApplicationList(List<App> appList) {
+    public void setApplicationList(List<FollowApp> appList) {
         this.appList = appList;
     }
 
@@ -58,7 +53,7 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         holder.name1.setText(appList.get(position).getName());
         holder.packageName1.setText(appList.get(position).getPackageName());
-        holder.iconApp1.setImageBitmap(ImageProcessing.ByteArrayToBitmap(appList.get(position).getByteArray()));
+        holder.iconApp1.setImageBitmap(ImageProcessing.byteArrayToBitmap(appList.get(position).getByteArray()));
     }
 
     @Override
@@ -92,7 +87,6 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             expandLayout = itemView.findViewById(R.id.expandLayout);
             hourPicker = itemView.findViewById(R.id.hourPicker);
             minutePicker = itemView.findViewById(R.id.minutePicker);
-            secondPicker = itemView.findViewById(R.id.secondPicker);
 
             hourPicker.setMinValue(0);
             hourPicker.setMaxValue(23);
@@ -102,13 +96,9 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             minutePicker.setMaxValue(59);
             minutePicker.setFormatter(new CustomFormatter());
 
-            secondPicker.setMinValue(0);
-            secondPicker.setMaxValue(60);
-            secondPicker.setFormatter(new CustomFormatter());
-
             isExpand = false;
 
-            densityRatio = ScreenFunc.GetDensityRatio(context);
+            densityRatio = ScreenFunc.getDensityRatio(context);
 
             layoutParams = imgView1.getLayoutParams();
             layoutParams.height = CONSTANT.START_DP * (int) densityRatio;
@@ -118,16 +108,16 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             btnExpand.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ChangeViewSize();
+                    changeViewSize();
                 }
             });
         }
 
-        public void SetViewSize(boolean isExpand) {
+        public void setViewSize(boolean isExpand) {
             ValueAnimator animator;
             if (isExpand) {
                 animator = ValueAnimator.ofInt(CONSTANT.START_DP * (int) densityRatio, CONSTANT.END_DP * (int) densityRatio);
-                animator.setDuration(500);
+                animator.setDuration(300);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -145,7 +135,7 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
                 animator.start();
             } else {
                 animator = ValueAnimator.ofInt(CONSTANT.END_DP * (int) densityRatio, CONSTANT.START_DP * (int) densityRatio);
-                animator.setDuration(500);
+                animator.setDuration(300);
                 animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                     @Override
                     public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -164,16 +154,16 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             }
         }
 
-        public void ChangeViewSize() {
+        public void changeViewSize() {
             isExpand = !isExpand;
-            SetViewSize(isExpand);
+            setViewSize(isExpand);
             ObjectAnimator animator;
             if (isExpand) {
                 animator = ObjectAnimator.ofFloat(btnExpand, "rotation", 0.f, 180.f);
             } else {
                 animator = ObjectAnimator.ofFloat(btnExpand, "rotation", 180.f, 0.f);
             }
-            animator.setDuration(500);
+            animator.setDuration(300);
             animator.start();
         }
     }
