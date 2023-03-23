@@ -1,10 +1,9 @@
 package com.tristaam.usagetimecontrol.Controller.Util;
 
 import android.content.Context;
-import android.util.DisplayMetrics;
 
 public class ScreenFunc {
-    public static float GetDensityRatio(Context context){
+    public static float getDensityRatio(Context context){
         return context.getResources().getDisplayMetrics().density;
     }
 }
