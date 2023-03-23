@@ -10,20 +10,17 @@ public class App extends ArrayList<Parcelable> implements Comparable<App>, Parce
     private String packageName;
     // byteArray is a compression of Bitmap
     private byte[] byteArray;
-    private boolean isChoose;
 
     public App(String name, String packageName, byte[] byteArray) {
         this.name = name;
         this.packageName = packageName;
         this.byteArray = byteArray;
-        this.isChoose = false;
     }
 
     protected App(Parcel in) {
         name = in.readString();
         packageName = in.readString();
         byteArray = in.createByteArray();
-        isChoose = in.readByte() != 0;
     }
 
     public static final Creator<App> CREATOR = new Creator<App>() {
@@ -62,14 +59,6 @@ public class App extends ArrayList<Parcelable> implements Comparable<App>, Parce
         this.byteArray = byteArray;
     }
 
-    public boolean isChoose() {
-        return isChoose;
-    }
-
-    public void setChoose(boolean choose) {
-        isChoose = choose;
-    }
-
     @Override
     public int compareTo(App o) {
         if (!name.equals(o.getName())) {
@@ -88,6 +77,5 @@ public class App extends ArrayList<Parcelable> implements Comparable<App>, Parce
         dest.writeString(name);
         dest.writeString(packageName);
         dest.writeByteArray(byteArray);
-        dest.writeByte((byte) (isChoose ? 1 : 0));
     }
 }
