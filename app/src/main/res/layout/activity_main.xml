@@ -53,7 +53,7 @@
         android:layout_weight="1"
         android:background="@drawable/button_custom"
         android:fontFamily="@font/montserratsemibold"
-        android:onClick="BtnAddClick"
+        android:onClick="btnAddClick"
         android:text="Add"
         android:textColor="@color/white"
         app:backgroundTint="@null"
