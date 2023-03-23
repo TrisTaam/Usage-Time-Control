@@ -10,7 +10,7 @@ import java.io.ByteArrayOutputStream;
 
 public class ImageProcessing {
 
-    public static Bitmap DrawableToBitmap(Drawable drawable) {
+    public static Bitmap drawableToBitmap(Drawable drawable) {
         Bitmap bitmap;
         if (drawable instanceof BitmapDrawable) {
             bitmap = ((BitmapDrawable) drawable).getBitmap();
@@ -23,14 +23,14 @@ public class ImageProcessing {
         return bitmap;
     }
 
-    public static byte[] BitmapToByteArray(Bitmap bitmap) {
+    public static byte[] bitmapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }
 
-    public static Bitmap ByteArrayToBitmap(byte[] byteArray) {
+    public static Bitmap byteArrayToBitmap(byte[] byteArray) {
         Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         return bitmap;
     }
