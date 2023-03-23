@@ -46,6 +46,7 @@
             android:id="@+id/swtFollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:background="@null"
             android:thumbTint="@color/white"
             android:track="@drawable/switch_custom"
@@ -139,39 +140,35 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toRightOf="@id/hourPicker" />
 
-            <TextView
-                android:id="@+id/second"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratregular"
-                android:text="Giây"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/white"
-                app:layout_constraintEnd_toEndOf="@+id/secondPicker"
-                app:layout_constraintStart_toStartOf="@+id/secondPicker"
-                app:layout_constraintTop_toBottomOf="@+id/setTime" />
-
-            <NumberPicker
-                android:id="@+id/secondPicker"
-                android:layout_width="wrap_content"
-                android:layout_height="150dp"
-                android:layout_marginStart="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/minutePicker" />
-
             <Button
                 android:id="@+id/btnSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="2dp"
                 android:background="@drawable/button_custom"
-                app:backgroundTint="@null"
                 android:fontFamily="@font/montserratsemibold"
-                android:textColor="@color/white"
                 android:text="Lưu"
-                app:layout_constraintBottom_toBottomOf="@+id/secondPicker"
+                android:textColor="@color/white"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/secondPicker"
-                app:layout_constraintTop_toTopOf="@+id/secondPicker" />
+                app:layout_constraintStart_toEndOf="@+id/minutePicker"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.2" />
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_custom"
+                android:fontFamily="@font/montserratsemibold"
+                android:text="Xoá"
+                android:textColor="@color/white"
+                app:backgroundTint="@null"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/btnSave"
+                app:layout_constraintStart_toStartOf="@+id/btnSave"
+                app:layout_constraintTop_toBottomOf="@+id/btnSave" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
