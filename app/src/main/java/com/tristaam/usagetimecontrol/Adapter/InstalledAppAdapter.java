@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.usagetimecontrol.R;
+import com.tristaam.usagetimecontrol.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Listener.InstalledAppListener;
@@ -52,7 +52,7 @@ public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapte
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         holder.name.setText(appList.get(position).getName());
         holder.packageName.setText(appList.get(position).getPackageName());
-        holder.iconApp.setImageBitmap(ImageProcessing.ByteArrayToBitmap(appList.get(position).getByteArray()));
+        holder.iconApp.setImageBitmap(ImageProcessing.byteArrayToBitmap(appList.get(position).getByteArray()));
         setAnimation(holder.itemView, position);
     }
 
