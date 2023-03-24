@@ -1,12 +1,12 @@
 package com.tristaam.usagetimecontrol.Activity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,12 +14,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Adapter.FollowAppAdapter;
+import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Database.FollowAppDatabase;
 import com.tristaam.usagetimecontrol.Model.App;
 import com.tristaam.usagetimecontrol.Model.FollowApp;
+import com.tristaam.usagetimecontrol.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
         installedAppList = getUserApp();
-        loadData();
     }
 
     @Override
@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
     public void btnAddClick(View view) {
         Intent intent = new Intent(this, InstalledAppActivity.class);
         intent.putParcelableArrayListExtra("InstalledAppList", (ArrayList<? extends Parcelable>) installedAppList);
-        Bundle bundle = intent.getExtras();
-        Parcel parcel = Parcel.obtain();
-        bundle.writeToParcel(parcel, 0);
         startActivityForResult(intent, 1);
     }
 
@@ -81,7 +78,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadData() {
         followAppList = FollowAppDatabase.getInstance(this).followAppDAO().getFollowAppList();
-        followAppView.setAdapter(new FollowAppAdapter(this, followAppList));
+        followAppView.setAdapter(new FollowAppAdapter(this, followAppList, new FollowAppListener.OnClickListener() {
+            @Override
+            public void onClick(int position) {
+                deleteFollowApp(followAppList.get(position));
+            }
+        }));
     }
 
     public List<App> getUserApp() {
@@ -102,5 +104,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean isExistFollowApp(FollowApp followApp) {
         List<FollowApp> tmp = FollowAppDatabase.getInstance(this).followAppDAO().checkFollowApp(followApp.getPackageName());
         return tmp != null && !tmp.isEmpty();
+    }
+
+    public void deleteFollowApp(final FollowApp followApp) {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Xác nhận xoá")
+                .setMessage("Bạn có chắc chắn muốn xoá " + followApp.getName() + " khỏi danh sách không?")
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FollowAppDatabase.getInstance(MainActivity.this).followAppDAO().delete(followApp);
+                        Toast.makeText(MainActivity.this, "Đã xoá " + followApp.getName() + " khỏi danh sách", Toast.LENGTH_SHORT).show();
+                        loadData();
+                    }
+                })
+                .setNegativeButton("Không", null)
+                .show();
     }
 }
