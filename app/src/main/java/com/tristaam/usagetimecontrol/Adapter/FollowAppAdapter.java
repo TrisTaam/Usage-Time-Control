@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
 import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.CustomFormatter;
@@ -26,13 +28,15 @@ import com.tristaam.usagetimecontrol.Model.FollowApp;
 
 import java.util.List;
 
-public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.DataViewHolder> {
+public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.DataViewHolder> implements FollowAppListener {
     private List<FollowApp> appList;
     private Context context;
+    private OnClickListener listener;
 
-    public FollowAppAdapter(Context context, List<FollowApp> appList) {
+    public FollowAppAdapter(Context context, List<FollowApp> appList, OnClickListener listener) {
         this.appList = appList;
         this.context = context;
+        this.listener = listener;
     }
 
     public List<FollowApp> getApplicationList() {
@@ -74,6 +78,8 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         private NumberPicker minutePicker;
         private NumberPicker secondPicker;
         private ViewGroup.LayoutParams layoutParams;
+        private Button btnSave;
+        private Button btnDelete;
         private float densityRatio;
 
         public DataViewHolder(View itemView) {
@@ -87,6 +93,8 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             expandLayout = itemView.findViewById(R.id.expandLayout);
             hourPicker = itemView.findViewById(R.id.hourPicker);
             minutePicker = itemView.findViewById(R.id.minutePicker);
+            btnSave = itemView.findViewById(R.id.btnSave);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
 
             hourPicker.setMinValue(0);
             hourPicker.setMaxValue(23);
@@ -109,6 +117,13 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
                 @Override
                 public void onClick(View v) {
                     changeViewSize();
+                }
+            });
+
+            btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClick(getAdapterPosition());
                 }
             });
         }

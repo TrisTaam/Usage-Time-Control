@@ -1,6 +1,7 @@
 package com.tristaam.usagetimecontrol.Database;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -18,4 +19,7 @@ public interface FollowAppDAO {
 
     @Query("SELECT * FROM follow_app WHERE packageName=:packageName")
     List<FollowApp> checkFollowApp(String packageName);
+
+    @Delete
+    void delete(FollowApp followApp);
 }
