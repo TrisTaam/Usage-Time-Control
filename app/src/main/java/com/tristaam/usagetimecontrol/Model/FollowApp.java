@@ -1,7 +1,11 @@
 package com.tristaam.usagetimecontrol.Model;
 
+import android.util.Log;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 
 @Entity(tableName = "follow_app")
 public class FollowApp {
@@ -10,13 +14,14 @@ public class FollowApp {
     private String name;
     private String packageName;
     private byte[] byteArray;
-    private boolean isChoose;
+    private long usageTime;
+    private long limitTime;
 
-    public FollowApp(String name, String packageName, byte[] byteArray, boolean isChoose) {
+    public FollowApp(String name, String packageName, byte[] byteArray) {
         this.name = name;
         this.packageName = packageName;
         this.byteArray = byteArray;
-        this.isChoose = false;
+        this.limitTime = ((long) (CONSTANT.MAX_HOUR - 1) * 60 * 60 + (long) (CONSTANT.MAX_MINUTE - 1) * 60) * 1000;
     }
 
     public int getId() {
@@ -51,11 +56,19 @@ public class FollowApp {
         this.byteArray = byteArray;
     }
 
-    public boolean isChoose() {
-        return isChoose;
+    public long getUsageTime() {
+        return usageTime;
     }
 
-    public void setChoose(boolean choose) {
-        isChoose = choose;
+    public void setUsageTime(long usageTime) {
+        this.usageTime = usageTime;
+    }
+
+    public long getLimitTime() {
+        return limitTime;
+    }
+
+    public void setLimitTime(long limitTime) {
+        this.limitTime = limitTime;
     }
 }

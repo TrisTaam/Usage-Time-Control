@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.tristaam.usagetimecontrol.Model.FollowApp;
 
@@ -22,4 +23,7 @@ public interface FollowAppDAO {
 
     @Delete
     void delete(FollowApp followApp);
+
+    @Update
+    void update(FollowApp followApp);
 }

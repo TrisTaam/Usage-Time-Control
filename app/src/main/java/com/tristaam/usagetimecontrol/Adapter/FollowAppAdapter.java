@@ -39,14 +39,6 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         this.listener = listener;
     }
 
-    public List<FollowApp> getApplicationList() {
-        return appList;
-    }
-
-    public void setApplicationList(List<FollowApp> appList) {
-        this.appList = appList;
-    }
-
     @Override
     public DataViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.follow_app_view, parent, false);
@@ -58,6 +50,7 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         holder.name1.setText(appList.get(position).getName());
         holder.packageName1.setText(appList.get(position).getPackageName());
         holder.iconApp1.setImageBitmap(ImageProcessing.byteArrayToBitmap(appList.get(position).getByteArray()));
+        holder.statistic.setText("Đã sử dụng / " + CustomFormatter.MilliSecToHHMM(appList.get(position).getLimitTime()) + " (%)");
     }
 
     @Override
@@ -76,33 +69,22 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         private ConstraintLayout expandLayout;
         private NumberPicker hourPicker;
         private NumberPicker minutePicker;
-        private NumberPicker secondPicker;
         private ViewGroup.LayoutParams layoutParams;
         private Button btnSave;
         private Button btnDelete;
+        private TextView statistic;
         private float densityRatio;
 
         public DataViewHolder(View itemView) {
             super(itemView);
-            imgView1 = itemView.findViewById(R.id.imgView1);
-            name1 = itemView.findViewById(R.id.name1);
-            packageName1 = itemView.findViewById(R.id.packageName1);
-            iconApp1 = itemView.findViewById(R.id.iconApp1);
-            swtFollow = itemView.findViewById(R.id.swtFollow);
-            btnExpand = itemView.findViewById(R.id.btnExpand);
-            expandLayout = itemView.findViewById(R.id.expandLayout);
-            hourPicker = itemView.findViewById(R.id.hourPicker);
-            minutePicker = itemView.findViewById(R.id.minutePicker);
-            btnSave = itemView.findViewById(R.id.btnSave);
-            btnDelete = itemView.findViewById(R.id.btnDelete);
+            init();
+            hourPicker.setMinValue(CONSTANT.MIN_HOUR);
+            hourPicker.setMaxValue(CONSTANT.MAX_HOUR - 1);
+            hourPicker.setFormatter(new CustomFormatter.NumberPickerCustomFormatter());
 
-            hourPicker.setMinValue(0);
-            hourPicker.setMaxValue(23);
-            hourPicker.setFormatter(new CustomFormatter());
-
-            minutePicker.setMinValue(0);
-            minutePicker.setMaxValue(59);
-            minutePicker.setFormatter(new CustomFormatter());
+            minutePicker.setMinValue(CONSTANT.MIN_MINUTE);
+            minutePicker.setMaxValue(CONSTANT.MAX_MINUTE);
+            minutePicker.setFormatter(new CustomFormatter.NumberPickerCustomFormatter());
 
             isExpand = false;
 
@@ -123,9 +105,31 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
             btnDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    listener.onClick(getAdapterPosition());
+                    listener.onClickDelete(getAdapterPosition());
                 }
             });
+
+            btnSave.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onClickSave(getAdapterPosition(), ((long) hourPicker.getValue() * 60 * 60 + (long) minutePicker.getValue() * 60) * 1000);
+                }
+            });
+        }
+
+        public void init() {
+            imgView1 = itemView.findViewById(R.id.imgView1);
+            name1 = itemView.findViewById(R.id.name1);
+            packageName1 = itemView.findViewById(R.id.packageName1);
+            iconApp1 = itemView.findViewById(R.id.iconApp1);
+            swtFollow = itemView.findViewById(R.id.swtFollow);
+            btnExpand = itemView.findViewById(R.id.btnExpand);
+            expandLayout = itemView.findViewById(R.id.expandLayout);
+            hourPicker = itemView.findViewById(R.id.hourPicker);
+            minutePicker = itemView.findViewById(R.id.minutePicker);
+            btnSave = itemView.findViewById(R.id.btnSave);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
+            statistic = itemView.findViewById(R.id.statistic);
         }
 
         public void setViewSize(boolean isExpand) {
