@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Adapter.InstalledAppAdapter;
 import com.tristaam.usagetimecontrol.Model.App;
@@ -29,7 +30,7 @@ public class InstalledAppActivity extends AppCompatActivity {
     }
 
     public void Init() {
-        installedAppList = getIntent().getParcelableArrayListExtra("InstalledAppList");
+        installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_2);
         installedAppView = findViewById(R.id.installedAppView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         installedAppView.setLayoutManager(layoutManager);
@@ -48,7 +49,7 @@ public class InstalledAppActivity extends AppCompatActivity {
 
     public void finish(int position) {
         Intent intent = new Intent();
-        intent.putExtra("ChooseApp", (Parcelable) installedAppList.get(position));
+        intent.putExtra(CONSTANT.INTENT_3, (Parcelable) installedAppList.get(position));
         setResult(RESULT_OK, intent);
         finish();
     }

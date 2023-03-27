@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.tristaam.usagetimecontrol.Adapter.FollowAppAdapter;
 import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
+import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Database.FollowAppDatabase;
 import com.tristaam.usagetimecontrol.Model.App;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
-        installedAppList = getUserApp();
+        installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_2);
     }
 
     @Override
@@ -49,15 +50,15 @@ public class MainActivity extends AppCompatActivity {
     public void btnAddClick(View view) {
         Intent intent = new Intent(this, InstalledAppActivity.class);
         intent.putParcelableArrayListExtra("InstalledAppList", (ArrayList<? extends Parcelable>) installedAppList);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, CONSTANT.REQUEST_CODE);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == CONSTANT.REQUEST_CODE && resultCode == RESULT_OK) {
             App tmp = data.getParcelableExtra("ChooseApp");
-            FollowApp followApp = new FollowApp(tmp.getName(), tmp.getPackageName(), tmp.getByteArray(), false);
+            FollowApp followApp = new FollowApp(tmp.getName(), tmp.getPackageName(), tmp.getByteArray());
             if (isExistFollowApp(followApp)) {
                 Toast.makeText(this, followApp.getName() + " đã được thêm vào trước đó", Toast.LENGTH_SHORT).show();
                 return;
@@ -80,25 +81,15 @@ public class MainActivity extends AppCompatActivity {
         followAppList = FollowAppDatabase.getInstance(this).followAppDAO().getFollowAppList();
         followAppView.setAdapter(new FollowAppAdapter(this, followAppList, new FollowAppListener.OnClickListener() {
             @Override
-            public void onClick(int position) {
+            public void onClickDelete(int position) {
                 deleteFollowApp(followAppList.get(position));
             }
-        }));
-    }
 
-    public List<App> getUserApp() {
-        List<App> installedAppList = new ArrayList<>();
-        PackageManager pm = getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA | PackageManager.GET_SHARED_LIBRARY_FILES);
-        for (ApplicationInfo x : packages) {
-            if ((x.flags & ApplicationInfo.FLAG_SYSTEM) == 0 && !x.packageName.equals(getApplicationContext().getPackageName())) {
-                installedAppList.add(new App((String) pm.getApplicationLabel(x), x.packageName,
-                        // To reduce parcel size
-                        ImageProcessing.bitmapToByteArray(ImageProcessing.drawableToBitmap(pm.getApplicationIcon(x)))));
+            @Override
+            public void onClickSave(int position, long limitTime) {
+                updateFollowApp(followAppList.get(position), limitTime);
             }
-        }
-        Collections.sort(installedAppList);
-        return installedAppList;
+        }));
     }
 
     public boolean isExistFollowApp(FollowApp followApp) {
@@ -120,5 +111,12 @@ public class MainActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Không", null)
                 .show();
+    }
+
+    public void updateFollowApp(FollowApp followApp, long limitTime) {
+        followApp.setLimitTime(limitTime);
+        FollowAppDatabase.getInstance(this).followAppDAO().update(followApp);
+        Toast.makeText(this,"Đã giới hạn thời gian của " + followApp.getName(),Toast.LENGTH_SHORT).show();
+        loadData();
     }
 }
