@@ -2,11 +2,13 @@ package com.tristaam.usagetimecontrol.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AppOpsManager;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.Settings;
 
 import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;

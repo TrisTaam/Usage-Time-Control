@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,12 +46,19 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         return new DataViewHolder(itemView);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull DataViewHolder holder, int position) {
         holder.name1.setText(appList.get(position).getName());
         holder.packageName1.setText(appList.get(position).getPackageName());
         holder.iconApp1.setImageBitmap(ImageProcessing.byteArrayToBitmap(appList.get(position).getByteArray()));
-        holder.statistic.setText("Đã sử dụng / " + CustomFormatter.MilliSecToHHMM(appList.get(position).getLimitTime()) + " (%)");
+        holder.statistic.setText("Đã sử dụng "
+                + CustomFormatter.MilliSecToHHMM(appList.get(position).getUsageTime())
+                + " / "
+                + CustomFormatter.MilliSecToHHMM(appList.get(position).getLimitTime())
+                + " ("
+                + Integer.toString((int)((double)appList.get(position).getUsageTime()/appList.get(position).getLimitTime()*100))
+                + "%)");
     }
 
     @Override

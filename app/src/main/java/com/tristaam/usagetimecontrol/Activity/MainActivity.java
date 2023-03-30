@@ -3,8 +3,6 @@ package com.tristaam.usagetimecontrol.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
@@ -17,14 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.tristaam.usagetimecontrol.Adapter.FollowAppAdapter;
 import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
 import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
-import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Database.FollowAppDatabase;
 import com.tristaam.usagetimecontrol.Model.App;
 import com.tristaam.usagetimecontrol.Model.FollowApp;
 import com.tristaam.usagetimecontrol.R;
+import com.tristaam.usagetimecontrol.Service.TrackUsageTimeService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -37,8 +34,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(MainActivity.this, TrackUsageTimeService.class);
+                startService(intent);
+            }
+        }).start();
         init();
-        installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_2);
+        installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_1);
     }
 
     @Override
@@ -49,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnAddClick(View view) {
         Intent intent = new Intent(this, InstalledAppActivity.class);
-        intent.putParcelableArrayListExtra("InstalledAppList", (ArrayList<? extends Parcelable>) installedAppList);
+        intent.putParcelableArrayListExtra(CONSTANT.INTENT_2, (ArrayList<? extends Parcelable>) installedAppList);
         startActivityForResult(intent, CONSTANT.REQUEST_CODE);
     }
 

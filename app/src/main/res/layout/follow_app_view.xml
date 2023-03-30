@@ -58,10 +58,10 @@
             android:id="@+id/statistic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratregular"
             android:layout_marginTop="5dp"
+            android:fontFamily="@font/montserratregular"
             android:text="Đã sử dụng / (%)"
-            android:textColor="@color/white"
+            android:textColor="#FFE5B4"
             app:layout_constraintEnd_toEndOf="@+id/imgView1"
             app:layout_constraintStart_toStartOf="@+id/imgView1"
             app:layout_constraintTop_toBottomOf="@id/relativeLayout" />

@@ -1,5 +1,6 @@
 package com.tristaam.usagetimecontrol.Controller.Util;
 
+import android.annotation.SuppressLint;
 import android.widget.NumberPicker;
 
 public class CustomFormatter {
@@ -10,9 +11,10 @@ public class CustomFormatter {
         }
     }
 
+    @SuppressLint("DefaultLocale")
     public static String MilliSecToHHMM(long milliSec) {
         long hour = milliSec / (60 * 60 * 1000);
         long minute = (milliSec % (60 * 60 * 1000)) / (60 * 1000);
-        return String.format("%02d giờ %02d phút", hour, minute);
+        return String.format("%02dh %02dm", hour, minute);
     }
 }

@@ -16,12 +16,15 @@ public class FollowApp {
     private byte[] byteArray;
     private long usageTime;
     private long limitTime;
+    private boolean isForeground;
 
     public FollowApp(String name, String packageName, byte[] byteArray) {
         this.name = name;
         this.packageName = packageName;
         this.byteArray = byteArray;
+        this.usageTime = (long) 0;
         this.limitTime = ((long) (CONSTANT.MAX_HOUR - 1) * 60 * 60 + (long) (CONSTANT.MAX_MINUTE - 1) * 60) * 1000;
+        this.isForeground = false;
     }
 
     public int getId() {
@@ -70,5 +73,13 @@ public class FollowApp {
 
     public void setLimitTime(long limitTime) {
         this.limitTime = limitTime;
+    }
+
+    public boolean isForeground() {
+        return isForeground;
+    }
+
+    public void setForeground(boolean foreground) {
+        isForeground = foreground;
     }
 }
