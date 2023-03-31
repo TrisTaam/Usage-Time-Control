@@ -8,7 +8,6 @@ import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -34,6 +33,7 @@ public class TrackUsageTimeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("Time: ","Start");
         calendar = Calendar.getInstance(TimeZone.getDefault());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -71,6 +71,7 @@ public class TrackUsageTimeService extends Service {
         }).start();
 
         Notification notification = new NotificationCompat.Builder(this, "Background")
+                .setVisibility(NotificationCompat.VISIBILITY_SECRET)
                 .setSmallIcon(R.drawable.hourglass)
                 .setPriority(NotificationCompat.PRIORITY_MIN).build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -86,16 +87,16 @@ public class TrackUsageTimeService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("Time: ", "Destroyed");
     }
 
-    public void trackUsageTime(){
+    public void trackUsageTime() {
         long endTime = System.currentTimeMillis();
         List<UsageStats> usageStatsList = usageStatsManager.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, startTime, endTime);
         appList = FollowAppDatabase.getInstance(this).followAppDAO().getFollowAppList();
         for (FollowApp x : appList) {
             for (UsageStats usageStats : usageStatsList) {
                 if (usageStats.getPackageName().equals(x.getPackageName())) {
-                    Log.d("Time: ",x.getPackageName() + " "+ x.isForeground());
                     long totalTimeInForeground = usageStats.getTotalTimeInForeground();
                     if (x.isForeground()) {
                         if (totalTimeInForeground > x.getLimitTime()) {
@@ -110,13 +111,13 @@ public class TrackUsageTimeService extends Service {
         }
     }
 
-    public void updateForegroundApp(){
+    public void updateForegroundApp() {
         long endTime = System.currentTimeMillis();
         long startTime = endTime - (10 * 1000);
         UsageEvents usageEvents = usageStatsManager.queryEvents(startTime, endTime);
         UsageEvents.Event event = new UsageEvents.Event();
         appList = FollowAppDatabase.getInstance(this).followAppDAO().getFollowAppList();
-        for(FollowApp x:appList){
+        for (FollowApp x : appList) {
             x.setForeground(false);
             FollowAppDatabase.getInstance(this).followAppDAO().update(x);
         }
@@ -128,16 +129,16 @@ public class TrackUsageTimeService extends Service {
             if (event.getEventType() == UsageEvents.Event.MOVE_TO_FOREGROUND) {
                 tmp2.setForeground(true);
                 FollowAppDatabase.getInstance(this).followAppDAO().update(tmp2);
-            }
-            else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
+            } else if (event.getEventType() == UsageEvents.Event.MOVE_TO_BACKGROUND) {
                 tmp2.setForeground(false);
                 FollowAppDatabase.getInstance(this).followAppDAO().update(tmp2);
             }
         }
     }
 
-    public void sendNotification(String name){
+    public void sendNotification(String name) {
         Notification notification = new NotificationCompat.Builder(this, "Track Usage Time")
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.hourglass)
                 .setContentTitle("Cảnh báo")
                 .setContentText(name + " đã sử dụng quá thời gian trong ngày")
