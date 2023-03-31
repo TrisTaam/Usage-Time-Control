@@ -87,7 +87,7 @@ public class TrackUsageTimeService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("Time: ", "Destroyed");
+        stopForeground(true);
     }
 
     public void trackUsageTime() {
@@ -142,6 +142,7 @@ public class TrackUsageTimeService extends Service {
                 .setSmallIcon(R.drawable.hourglass)
                 .setContentTitle("Cảnh báo")
                 .setContentText(name + " đã sử dụng quá thời gian trong ngày")
+                .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setPriority(NotificationCompat.PRIORITY_HIGH).build();
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (notificationManager != null) {
