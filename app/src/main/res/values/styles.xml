@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NumberPickerTheme">
+        <item name="colorAccent">@color/white</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="fontFamily">@font/montserratregular</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>
