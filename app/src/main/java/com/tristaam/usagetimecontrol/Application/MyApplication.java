@@ -12,9 +12,9 @@ public class MyApplication extends Application {
         createNotificationChannel();
     }
 
-    public void createNotificationChannel(){
+    public void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel1 = new NotificationChannel("Background", "Chạy ngầm", NotificationManager.IMPORTANCE_HIGH);
+            NotificationChannel channel1 = new NotificationChannel("Background", "Chạy ngầm", NotificationManager.IMPORTANCE_MIN);
             channel1.setDescription("");
             NotificationChannel channel2 = new NotificationChannel("Track Usage Time", "Theo dõi thời gian chạy", NotificationManager.IMPORTANCE_HIGH);
             channel2.setDescription("");
