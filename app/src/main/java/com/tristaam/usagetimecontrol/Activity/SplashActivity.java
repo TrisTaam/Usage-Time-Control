@@ -27,31 +27,29 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (isUsageAccessGranted()){
+        if (isUsageAccessGranted()) {
             navigate();
-        }
-        else{
+        } else {
             Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivityForResult(intent,900);
+            startActivityForResult(intent, 900);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 900 && isUsageAccessGranted()){
+        if (requestCode == 900 && isUsageAccessGranted()) {
             navigate();
-        }
-        else{
+        } else {
             finish();
         }
     }
 
-    public void navigate(){
+    public void navigate() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (!isUsageAccessGranted()){
+                if (!isUsageAccessGranted()) {
                     Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
                     startActivity(intent);
                 }

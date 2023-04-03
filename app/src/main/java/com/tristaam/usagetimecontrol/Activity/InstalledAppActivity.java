@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
-import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Adapter.InstalledAppAdapter;
+import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Model.App;
+import com.tristaam.usagetimecontrol.R;
 
 import java.util.ArrayList;
 import java.util.List;

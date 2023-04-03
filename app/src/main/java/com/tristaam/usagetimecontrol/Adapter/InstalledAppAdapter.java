@@ -13,11 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.tristaam.usagetimecontrol.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Listener.InstalledAppListener;
+import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Model.App;
+import com.tristaam.usagetimecontrol.R;
 
 import java.util.List;
 
