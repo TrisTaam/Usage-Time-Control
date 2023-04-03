@@ -1,7 +1,5 @@
 package com.tristaam.usagetimecontrol.Model;
 
-import android.util.Log;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,6 +15,7 @@ public class FollowApp {
     private long usageTime;
     private long limitTime;
     private boolean isForeground;
+    private boolean isTurnOn;
 
     public FollowApp(String name, String packageName, byte[] byteArray) {
         this.name = name;
@@ -25,6 +24,7 @@ public class FollowApp {
         this.usageTime = (long) 0;
         this.limitTime = ((long) (CONSTANT.MAX_HOUR - 1) * 60 * 60 + (long) (CONSTANT.MAX_MINUTE - 1) * 60) * 1000;
         this.isForeground = false;
+        this.isTurnOn = true;
     }
 
     public int getId() {
@@ -81,5 +81,13 @@ public class FollowApp {
 
     public void setForeground(boolean foreground) {
         isForeground = foreground;
+    }
+
+    public boolean isTurnOn() {
+        return isTurnOn;
+    }
+
+    public void setTurnOn(boolean turnOn) {
+        isTurnOn = turnOn;
     }
 }
