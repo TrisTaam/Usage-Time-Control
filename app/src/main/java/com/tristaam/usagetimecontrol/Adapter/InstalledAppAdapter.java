@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,7 +21,9 @@ import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Model.App;
 import com.tristaam.usagetimecontrol.R;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class InstalledAppAdapter extends RecyclerView.Adapter<InstalledAppAdapter.DataViewHolder> implements InstalledAppListener {
     private List<App> appList;
