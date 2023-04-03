@@ -9,7 +9,6 @@ import android.app.usage.UsageStatsManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
@@ -33,7 +32,6 @@ public class TrackUsageTimeService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("Time: ","Start");
         calendar = Calendar.getInstance(TimeZone.getDefault());
         calendar.set(Calendar.HOUR_OF_DAY, 0);
         calendar.set(Calendar.MINUTE, 0);
@@ -48,7 +46,7 @@ public class TrackUsageTimeService extends Service {
                 while (true) {
                     try {
                         trackUsageTime();
-                        Thread.sleep(10000);
+                        Thread.sleep(10 * 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -62,7 +60,7 @@ public class TrackUsageTimeService extends Service {
                 while (true) {
                     try {
                         updateForegroundApp();
-                        Thread.sleep(10000);
+                        Thread.sleep(10 * 1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -98,7 +96,7 @@ public class TrackUsageTimeService extends Service {
             for (UsageStats usageStats : usageStatsList) {
                 if (usageStats.getPackageName().equals(x.getPackageName())) {
                     long totalTimeInForeground = usageStats.getTotalTimeInForeground();
-                    if (x.isForeground()) {
+                    if (x.isForeground() && x.isTurnOn()) {
                         if (totalTimeInForeground > x.getLimitTime()) {
                             sendNotification(x.getName());
                         }
@@ -141,6 +139,7 @@ public class TrackUsageTimeService extends Service {
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                 .setSmallIcon(R.drawable.hourglass)
                 .setContentTitle("Cảnh báo")
+                .setFullScreenIntent(null, true)
                 .setContentText(name + " đã sử dụng quá thời gian trong ngày")
                 .setStyle(new NotificationCompat.DecoratedCustomViewStyle())
                 .setPriority(NotificationCompat.PRIORITY_HIGH).build();
