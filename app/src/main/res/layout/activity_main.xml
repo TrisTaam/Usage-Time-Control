@@ -37,13 +37,21 @@
         app:layout_constraintTop_toTopOf="@+id/btnAdd"
         tools:ignore="HardcodedText,RtlHardcoded" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/followAppView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="70dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/followAppView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnAdd" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
         android:id="@+id/btnAdd"
