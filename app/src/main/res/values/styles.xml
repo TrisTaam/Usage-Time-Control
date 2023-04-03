@@ -6,4 +6,10 @@
         <item name="fontFamily">@font/montserratregular</item>
         <item name="android:textSize">14sp</item>
     </style>
+
+    <style name="SearchView">
+        <item name="fontFamily">@font/montserratregular</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColorPrimary">@color/white</item>
+    </style>
 </resources>
