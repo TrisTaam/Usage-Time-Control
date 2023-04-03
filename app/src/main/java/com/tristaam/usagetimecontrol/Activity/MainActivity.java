@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Toast;
 
@@ -28,7 +27,6 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private List<FollowApp> followAppList = new ArrayList<>();
-    private List<App> installedAppList = new ArrayList<>();
     private RecyclerView followAppView;
     private SwipeRefreshLayout swipeRefresh;
 
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
                 swipeRefresh.setRefreshing(false);
             }
         });
-        installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_1);
     }
 
     @Override
@@ -62,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void btnAddClick(View view) {
         Intent intent = new Intent(this, InstalledAppActivity.class);
-        intent.putParcelableArrayListExtra(CONSTANT.INTENT_2, (ArrayList<? extends Parcelable>) installedAppList);
         startActivityForResult(intent, CONSTANT.REQUEST_CODE);
     }
 
@@ -83,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void init() {
         followAppList = new ArrayList<>();
-        installedAppList = new ArrayList<>();
         swipeRefresh = findViewById(R.id.swipeRefresh);
         followAppView = findViewById(R.id.followAppView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

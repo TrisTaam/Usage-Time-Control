@@ -5,15 +5,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
-import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
+import com.tristaam.usagetimecontrol.Controller.Util.ScreenFunc;
 import com.tristaam.usagetimecontrol.Model.App;
 import com.tristaam.usagetimecontrol.R;
 
@@ -22,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
+    public static List<App> appList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-                intent.putParcelableArrayListExtra(CONSTANT.INTENT_1, (ArrayList<? extends Parcelable>) getUserApp());
+                appList = ScreenFunc.getUserApp(SplashActivity.this);
                 startActivity(intent);
                 finish();
             }
