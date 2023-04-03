@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.tristaam.usagetimecontrol.Adapter.FollowAppAdapter;
 import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private List<FollowApp> followAppList = new ArrayList<>();
     private List<App> installedAppList = new ArrayList<>();
     private RecyclerView followAppView;
+    private SwipeRefreshLayout swipeRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
         init();
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadData();
+                swipeRefresh.setRefreshing(false);
+            }
+        });
         installedAppList = getIntent().getParcelableArrayListExtra(CONSTANT.INTENT_1);
     }
 
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     public void init() {
         followAppList = new ArrayList<>();
         installedAppList = new ArrayList<>();
+        swipeRefresh = findViewById(R.id.swipeRefresh);
         followAppView = findViewById(R.id.followAppView);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         followAppView.setLayoutManager(layoutManager);
@@ -92,6 +102,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClickSave(int position, long limitTime) {
                 updateFollowApp(followAppList.get(position), limitTime);
+            }
+
+            @Override
+            public void onChangeSwitch(int position, boolean isTurnOn) {
+                updateFollowApp(followAppList.get(position), isTurnOn);
             }
         }));
     }
@@ -120,7 +135,17 @@ public class MainActivity extends AppCompatActivity {
     public void updateFollowApp(FollowApp followApp, long limitTime) {
         followApp.setLimitTime(limitTime);
         FollowAppDatabase.getInstance(this).followAppDAO().update(followApp);
-        Toast.makeText(this,"Đã giới hạn thời gian của " + followApp.getName(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Đã giới hạn thời gian của " + followApp.getName(), Toast.LENGTH_SHORT).show();
+        loadData();
+    }
+
+    public void updateFollowApp(FollowApp followApp, boolean isTurnOn) {
+        if (followApp.isTurnOn() == isTurnOn) {
+            return;
+        }
+        followApp.setTurnOn(isTurnOn);
+        FollowAppDatabase.getInstance(this).followAppDAO().update(followApp);
+        Toast.makeText(this, "Đã " + (isTurnOn ? "bật" : "tắt") + " giới hạn thời gian của " + followApp.getName(), Toast.LENGTH_SHORT).show();
         loadData();
     }
 }

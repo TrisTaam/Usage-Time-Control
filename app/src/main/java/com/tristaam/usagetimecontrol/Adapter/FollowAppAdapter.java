@@ -9,7 +9,11 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.Switch;
@@ -20,23 +24,25 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tristaam.usagetimecontrol.Controller.Listener.FollowAppListener;
-import com.tristaam.usagetimecontrol.R;
 import com.tristaam.usagetimecontrol.Controller.Util.CONSTANT;
 import com.tristaam.usagetimecontrol.Controller.Util.CustomFormatter;
 import com.tristaam.usagetimecontrol.Controller.Util.ImageProcessing;
 import com.tristaam.usagetimecontrol.Controller.Util.ScreenFunc;
 import com.tristaam.usagetimecontrol.Model.FollowApp;
+import com.tristaam.usagetimecontrol.R;
 
 import java.util.List;
 
 public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.DataViewHolder> implements FollowAppListener {
     private List<FollowApp> appList;
     private Context context;
+    private int lastPosition;
     private OnClickListener listener;
 
     public FollowAppAdapter(Context context, List<FollowApp> appList, OnClickListener listener) {
         this.appList = appList;
         this.context = context;
+        this.lastPosition = -1;
         this.listener = listener;
     }
 
@@ -52,13 +58,24 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
         holder.name1.setText(appList.get(position).getName());
         holder.packageName1.setText(appList.get(position).getPackageName());
         holder.iconApp1.setImageBitmap(ImageProcessing.byteArrayToBitmap(appList.get(position).getByteArray()));
+        holder.swtFollow.setChecked(appList.get(position).isTurnOn());
         holder.statistic.setText("Đã sử dụng "
                 + CustomFormatter.MilliSecToHHMM(appList.get(position).getUsageTime())
                 + " / "
                 + CustomFormatter.MilliSecToHHMM(appList.get(position).getLimitTime())
                 + " ("
-                + Integer.toString((int)((double)appList.get(position).getUsageTime()/appList.get(position).getLimitTime()*100))
+                + Integer.toString((int) ((double) appList.get(position).getUsageTime() / appList.get(position).getLimitTime() * 100))
                 + "%)");
+        setAnimation(holder.itemView, position);
+    }
+
+    public void setAnimation(View viewToAnimate, int position) {
+        if (position > lastPosition) {
+            Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_right_in);
+            animation.setInterpolator(new AccelerateDecelerateInterpolator());
+            viewToAnimate.startAnimation(animation);
+            lastPosition = position;
+        }
     }
 
     @Override
@@ -121,6 +138,13 @@ public class FollowAppAdapter extends RecyclerView.Adapter<FollowAppAdapter.Data
                 @Override
                 public void onClick(View v) {
                     listener.onClickSave(getAdapterPosition(), ((long) hourPicker.getValue() * 60 * 60 + (long) minutePicker.getValue() * 60) * 1000);
+                }
+            });
+
+            swtFollow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    listener.onChangeSwitch(getAdapterPosition(), isChecked);
                 }
             });
         }
